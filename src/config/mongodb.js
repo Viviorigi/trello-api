@@ -1,8 +1,5 @@
 
-
-const MONGODB_URI = 'mongodb+srv://duong2801:KaoTJH1og6Hak23Q@cluster0-duongdev.hp929qa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0-DuongDev'
-
-const DATABASE_NAME = 'trello-duong-mern-stack'
+import {env} from '~/config/environment'
 
 import { MongoClient, ServerApiVersion } from 'mongodb'
 
@@ -10,7 +7,7 @@ import { MongoClient, ServerApiVersion } from 'mongodb'
 let trelloDatabaseInstance = null
 
 //khoi tao 1 doi tuong client clientinstance de connect mongodb
-const mongoClientInstance = new MongoClient(MONGODB_URI, {
+const mongoClientInstance = new MongoClient(env.MONGODB_URI, {
   serverApi:{
     version: ServerApiVersion.v1,
     strict: true,
@@ -19,12 +16,20 @@ const mongoClientInstance = new MongoClient(MONGODB_URI, {
 })
 
 export const CONNECT_DB = async () => {
-  // goi ket ni voi mongodb atlas voi uri da khai bao
+  // goi ket noi voi mongodb atlas voi uri da khai bao
   await mongoClientInstance.connect()
 
   //ket noi thanh con thi lay database theo ten va gan nguoc no la len cai bien o tren
-  trelloDatabaseInstance = mongoClientInstance.db(DATABASE_NAME)
+  trelloDatabaseInstance = mongoClientInstance.db(env.DATABASE_NAME)
 }
+
+// dong ket noi mongodb
+export const CLOSE_DB = async () => {
+
+  await mongoClientInstance.close()
+
+}
+
 
 // func get_db : nay co nhiem vu export ra trello database instance sau khi da connect thanh cong
 //den mongodb de su dung o nhieu noi va phai dam bao chi luon goi get Db nay sau khi ket noi thanh cong
