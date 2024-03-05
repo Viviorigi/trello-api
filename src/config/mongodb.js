@@ -1,5 +1,5 @@
 
-import {env} from '~/config/environment'
+import { env } from '~/config/environment'
 
 import { MongoClient, ServerApiVersion } from 'mongodb'
 
