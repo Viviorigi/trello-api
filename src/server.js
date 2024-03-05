@@ -4,7 +4,7 @@ import express from 'express'
 import exitHook from 'async-exit-hook'
 import { CONNECT_DB, CLOSE_DB } from '~/config/mongodb'
 import { env } from '~/config/environment'
-
+import { APIs_V1 } from '~/routes/v1'
 const START_SERVER =() => {
 
   const app = express()
@@ -12,10 +12,8 @@ const START_SERVER =() => {
   const hostname = env.APP_HOST
   const port = env.APP_PORT
 
-  app.get('/', (req, res) => {
+  app.use('/v1', APIs_V1)
 
-    res.end('<h1>Hello World!</h1><hr>')
-  })
   app.listen(port, hostname, () => {
     // eslint-disable-next-line no-console
     console.log(`3.Hello ${env.AUTHOR}, I am running at http://${hostname}:${port}/`)
