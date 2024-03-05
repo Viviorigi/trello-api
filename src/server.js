@@ -12,7 +12,7 @@ const START_SERVER =() => {
   const hostname = env.APP_HOST
   const port = env.APP_PORT
 
-  app.get('/', async (req, res) => {
+  app.get('/', (req, res) => {
 
     res.end('<h1>Hello World!</h1><hr>')
   })
