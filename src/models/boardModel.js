@@ -95,6 +95,12 @@ const update = async (boardId, updateData) => {
         delete updateData[fieldname]
       }
     })
+
+    //doi voi du lieu lq objectid phai xu li du lieu o day
+    if (updateData.columnOrderIds) {
+      updateData.columnOrderIds = updateData.columnOrderIds.map(_id => (new ObjectId(_id)))
+    }
+
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
       { _id: new ObjectId(boardId) },
       { $set: updateData },
