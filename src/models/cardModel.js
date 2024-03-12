@@ -18,6 +18,9 @@ const CARD_COLLECTION_SCHEMA = Joi.object({
   _destroy: Joi.boolean().default(false)
 })
 
+
+const INVALID_UPDATE_FIELDS = ['_id', 'boardId', 'createdAt']
+
 const validateBeforeCreate = async (data) => {
   return await CARD_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false })
 }
@@ -43,9 +46,31 @@ const findOneById = async (id) => {
   } catch (error) {throw new Error(error)}
 }
 
+const update = async (cardId, updateData) => {
+  try {
+    // loc field khong cho cap nhat linh tinh
+    Object.keys(updateData).forEach(fieldname => {
+      if ( INVALID_UPDATE_FIELDS.includes(fieldname) ) {
+        delete updateData[fieldname]
+      }
+    })
+
+    //doi voi du lieu lq objectid phai xu li du lieu o day
+    if (updateData.columnId) updateData.columnId = new ObjectId(updateData.columnId)
+
+    const result = await GET_DB().collection(CARD_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new ObjectId(cardId) },
+      { $set: updateData },
+      { returnDocument:'after' }
+    )
+    return result
+  } catch (error) {throw new Error(error)}
+}
+
 export const cardModel = {
   CARD_COLLECTION_NAME,
   CARD_COLLECTION_SCHEMA,
   createNew,
-  findOneById
+  findOneById,
+  update
 }
