@@ -26,7 +26,7 @@ const START_SERVER =() => {
   if (env.BUILD_MODE==='production') {
     app.listen(process.env.PORT, () => {
       // eslint-disable-next-line no-console
-      console.log(`3.Hello ${env.AUTHOR}, I am running at ${process.env.APP_PORT}/`)
+      console.log(`3.Hello ${env.AUTHOR}, I am running at ${process.env.PORT}/`)
     })
   } else {
     //Moi truong local dev
