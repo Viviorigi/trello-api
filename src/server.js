@@ -14,9 +14,6 @@ const START_SERVER =() => {
 
   app.use(cors(corsOptions))
 
-  const hostname = env.APP_HOST
-  const port = env.APP_PORT
-
   app.use(express.json())
   //USE APIs_V1
   app.use('/v1', APIs_V1)
@@ -25,10 +22,19 @@ const START_SERVER =() => {
 
   app.use(errorHandlingMiddleware)
 
-  app.listen(port, hostname, () => {
-    // eslint-disable-next-line no-console
-    console.log(`3.Hello ${env.AUTHOR}, I am running at http://${hostname}:${port}/`)
-  })
+  //moi truong production (cu the la dang support cho render)
+  if (env.BUILD_MODE==='production') {
+    app.listen(process.env.PORT, () => {
+      // eslint-disable-next-line no-console
+      console.log(`3.Hello ${env.AUTHOR}, I am running at ${process.env.APP_PORT}/`)
+    })
+  } else {
+    //Moi truong local dev
+    app.listen(env.LOCAL_DEV_APP_PORT, env.LOCAL_DEV_APP_HOST, () => {
+      // eslint-disable-next-line no-console
+      console.log(`3.Hello ${env.AUTHOR}, I am running at http://${env.LOCAL_DEV_APP_HOST}:${env.LOCAL_DEV_APP_PORT}/`)
+    })
+  }
 
   //thuc hien cac tac vu cleanup truoc khi dung server
   exitHook(() => {
